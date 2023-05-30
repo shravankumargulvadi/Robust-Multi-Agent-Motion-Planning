@@ -1,27 +1,19 @@
 from collections import defaultdict
+import logging
+from tpg import TPG, TPG_node  # Assuming the TPG classes are defined in tpg.py
 
-# This class represents a directed graph using adjacency list representation
 class Graph: 
-    
-    # Constructor
     def __init__(self):
- 
-        # default dictionary to store graph
         self.graph = defaultdict(list)
  
-    # function to add an edge to graph
     def addEdge(self, u, v):
         self.graph[u].append(v)
  
-    # A function used by DFS
     def DFSUtil(self, v, visited, recursionStack):
- 
-        # Mark the current node as visited and print it
         visited.add(v)
         recursionStack.add(v)
         print(v, end=" ")
  
-        # Recur for all the vertices adjacent to this vertex
         for neighbour in self.graph[v]:
             if neighbour not in visited:
                 if self.DFSUtil(neighbour, visited, recursionStack):
@@ -31,8 +23,6 @@ class Graph:
 
         recursionStack.remove(v)
         return False
-    
-    # The function to do DFS traversal. It uses recursive DFSUtil()
     
     def DFS(self, v):
         visited = set()
@@ -44,22 +34,29 @@ class Graph:
         else:
             print("\n")
             print("Graph does NOT contain a cycle") 
- 
+
 
 if __name__ == "__main__":
     g = Graph()
-    # Create the TPG
-    g.addEdge(5, 9)
-    g.addEdge(5, 10)
-    g.addEdge(2, 6)
-    g.addEdge(4, 7)
-    g.addEdge(7, 11)
-    g.addEdge(7, 12)
-    g.addEdge(4, 8)
-    g.addEdge(1, 2)
-    g.addEdge(1, 3)
-    g.addEdge(1, 4)
-    g.addEdge(2, 5)
-    
-    # Function call
+
+    # Read the TPG from tpg.py
+    from tpg import sample_tpg
+    tpg = sample_tpg()
+
+    # Iterate over the TPG and add directed edges
+    for agent in tpg:
+        for node in agent:
+            node_name = node.name
+            next_node = node.next_node
+
+            if next_node:
+                next_node_name = next_node.name
+                g.addEdge(node_name, next_node_name)
+
+            type2_edge = node.type2
+            if type2_edge:
+                type2_edge_name = type2_edge.name
+                g.addEdge(node_name, type2_edge_name)
+
+    # Perform DFS on the graph
     g.DFS(1)
