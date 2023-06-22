@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 def nCr(n, r):
     """r-combination of n elements"""
-    return int(math.factorial(n) / math.factorial(r) / math.factorial(n-r))
+    return math.comb(n, r)
 
 # Bernstein
 
